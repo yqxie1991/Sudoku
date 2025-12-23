@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线数独 - 包含儿童模式与PDF打印</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container no-print">
+        <header>
+            <h1>数独游戏</h1>
+            <p>锻炼脑力，享受逻辑的乐趣</p>
+        </header>
+
+        <main>
+            <!-- 控制面板 -->
+            <div class="controls-section">
+                <div class="difficulty-selector">
+                    <label for="difficulty">选择难度：</label>
+                    <select id="difficulty">
+                        <option value="1">难度 1 - 儿童模式 (入门)</option>
+                        <option value="2">难度 2 - 初级</option>
+                        <option value="3" selected>难度 3 - 中级</option>
+                        <option value="4">难度 4 - 高级</option>
+                        <option value="5">难度 5 - 大师</option>
+                    </select>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="btn-new-game" class="primary-btn">新游戏</button>
+                    <button id="btn-check" class="secondary-btn">检查答案</button>
+                    <button id="btn-reset" class="secondary-btn">重置当前</button>
+                    <button id="btn-print-modal" class="accent-btn">打印题目 (PDF)</button>
+                </div>
+            </div>
+
+            <!-- 游戏区域 -->
+            <div class="game-board-container">
+                <div id="sudoku-board" class="sudoku-board">
+                    <!-- 网格将由 JS 生成 -->
+                </div>
+            </div>
+
+            <!-- 键盘区 (移动端优化) -->
+            <div class="numpad-container">
+                <button class="num-btn" data-val="1">1</button>
+                <button class="num-btn" data-val="2">2</button>
+                <button class="num-btn" data-val="3">3</button>
+                <button class="num-btn" data-val="4">4</button>
+                <button class="num-btn" data-val="5">5</button>
+                <button class="num-btn" data-val="6">6</button>
+                <button class="num-btn" data-val="7">7</button>
+                <button class="num-btn" data-val="8">8</button>
+                <button class="num-btn" data-val="9">9</button>
+                <button class="num-btn" data-val="clear">清除</button>
+            </div>
+
+            <!-- 规则说明 -->
+            <div class="rules-section">
+                <h2>游戏说明</h2>
+                <ul>
+                    <li><strong>规则：</strong> 在 9x9 的方格内填入数字 1-9，使得每行、每列和每个 3x3 的九宫格内数字不重复。</li>
+                    <li><strong>儿童模式 (难度1)：</strong> 仅约 20 个空格，适合初学者和儿童熟悉规则。</li>
+                    <li><strong>其他难度：</strong> 空格数量随等级递增，难度 5 约有 60 个空格。</li>
+                    <li><strong>操作：</strong> 点击格子后通过键盘或下方数字键输入。点击“检查答案”查看对错。</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 数独网页应用</p>
+        </footer>
+    </div>
+
+    <!-- 打印设置模态框 -->
+    <div id="print-modal" class="modal hidden no-print">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>打印设置</h2>
+            <p>将生成全新的题目用于打印。</p>
+            
+            <div class="print-settings">
+                <div class="setting-item">
+                    <label>纸张大小：</label>
+                    <span>A4 (默认)</span>
+                </div>
+                <div class="setting-item">
+                    <label>色彩模式：</label>
+                    <span>黑白 (默认)</span>
+                </div>
+                <div class="setting-item">
+                    <label for="print-difficulty">题目难度：</label>
+                    <select id="print-difficulty">
+                        <option value="1">难度 1 - 儿童模式</option>
+                        <option value="2">难度 2 - 初级</option>
+                        <option value="3" selected>难度 3 - 中级</option>
+                        <option value="4">难度 4 - 高级</option>
+                        <option value="5">难度 5 - 大师</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="print-count">每页题目数量：</label>
+                    <select id="print-count">
+                        <option value="1">1 个 (大图，适合儿童)</option>
+                        <option value="2">2 个</option>
+                        <option value="4">4 个 (标准练习)</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="print-pages">生成页数：</label>
+                    <input type="number" id="print-pages" value="1" min="1" max="50" style="width: 80px;">
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="btn-confirm-print" class="primary-btn">生成预览并打印</button>
+                <button id="btn-cancel-print" class="secondary-btn">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 打印专用区域 (屏幕隐藏，打印显示) -->
+    <div id="print-area" class="print-only">
+        <!-- 动态生成的打印内容将放在这里 -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

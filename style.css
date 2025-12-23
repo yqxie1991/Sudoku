@@ -1,0 +1,420 @@
+:root {
+    --primary-color: #4a90e2;
+    --accent-color: #50e3c2;
+    --bg-color: #f5f7fa;
+    --board-bg: #ffffff;
+    --border-color: #333;
+    --light-border: #ccc;
+    --highlight-bg: #e2eafc;
+    --error-color: #e74c3c;
+    --fixed-text: #2c3e50;
+    --user-text: #4a90e2;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: #333;
+    line-height: 1.6;
+}
+
+.app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: var(--primary-color);
+}
+
+/* 控制区 - 优化布局 */
+.controls-section {
+    width: 100%;
+    max-width: 600px; /* 限制宽度 */
+    margin: 0 auto 20px auto; /* 居中 */
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* 居中对齐 */
+    align-items: center;
+    gap: 15px; /* 增加间距 */
+}
+
+.difficulty-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.difficulty-selector select {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--light-border);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+.primary-btn:hover { background-color: #357abd; }
+
+.secondary-btn {
+    background-color: #e0e0e0;
+    color: #333;
+}
+.secondary-btn:hover { background-color: #d0d0d0; }
+
+.accent-btn {
+    background-color: var(--accent-color);
+    color: #004d40;
+}
+.accent-btn:hover { background-color: #3dd1b0; }
+
+/* 游戏棋盘 */
+.game-board-container {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.sudoku-board {
+    display: grid;
+    /* 适中尺寸 */
+    grid-template-columns: repeat(9, 38px); 
+    grid-template-rows: repeat(9, 38px);
+    border: 3px solid #333; /* 外框加深 */
+    background-color: #333; /* 宫格线颜色 */
+    gap: 1px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15); /* 立体阴影 */
+}
+
+@media (max-width: 500px) {
+    .sudoku-board {
+        grid-template-columns: repeat(9, 10vw);
+        grid-template-rows: repeat(9, 10vw);
+        font-size: 0.8rem;
+    }
+}
+
+.cell {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem; /* 字体加大 */
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+/* 3x3 宫格粗边框 - 覆盖 */
+.cell.border-right {
+    border-right: 2px solid #333 !important;
+}
+.cell.border-bottom {
+    border-bottom: 2px solid #333 !important;
+}
+
+/* 选中状态 */
+.cell.selected {
+    background-color: var(--highlight-bg) !important;
+    box-shadow: inset 0 0 0 2px var(--primary-color); /* 内阴影高亮 */
+}
+
+/* 相同数字高亮 */
+.cell.highlight-same {
+    background-color: #d6eaf8;
+}
+
+/* 错误状态 */
+.cell.error {
+    color: var(--error-color) !important;
+    background-color: #fadbd8;
+}
+
+/* 固定数字样式 */
+.cell.fixed {
+    color: var(--fixed-text);
+    font-weight: bold;
+}
+
+/* 用户输入数字样式 */
+.cell:not(.fixed) {
+    color: var(--user-text);
+}
+
+/* 键盘区 - 紧凑居中布局 */
+.numpad-container {
+    display: grid;
+    grid-template-columns: repeat(5, 45px); /* 固定 5 列 */
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 20px auto;
+    width: fit-content;
+}
+
+.num-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    background-color: white;
+    border: 1px solid var(--light-border);
+    border-radius: 6px;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.num-btn:hover {
+    border-color: var(--primary-color);
+    background-color: #f0f7ff;
+}
+
+.num-btn:active {
+    background-color: var(--highlight-bg);
+    transform: scale(0.95);
+}
+
+.num-btn[data-val="clear"] {
+    width: 45px;
+    font-size: 0.85rem;
+    color: #e74c3c;
+}
+
+/* 预置数字 */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* 提高层级 */
+}
+.modal.hidden {
+    display: none !important;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+.close-modal {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.print-settings {
+    margin: 20px 0;
+}
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.setting-item select,
+.setting-item input[type="number"] {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 0.95rem;
+    color: #1f2937;
+    min-width: 100px;
+    cursor: pointer;
+}
+
+.setting-item select:focus,
+.setting-item input[type="number"]:focus {
+    border-color: var(--primary-color);
+    outline: 2px solid rgba(37, 99, 235, 0.1);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* 打印专用区域 (屏幕隐藏，打印显示) */
+#print-area {
+    display: none;
+}
+.print-only {
+    display: none;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
+    
+    body {
+        background-color: white;
+        color: black;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    #print-area, .print-only {
+        display: block !important;
+        width: 100%;
+        height: 100%;
+    }
+
+    .print-page {
+        width: 100%;
+        min-height: 270mm; 
+        display: grid;
+        justify-content: center;
+        align-content: start;
+        page-break-after: always;
+        gap: 10mm;
+    }
+
+    .print-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        page-break-inside: avoid;
+    }
+
+    .print-title {
+        font-size: 16pt;
+        margin-bottom: 5mm;
+        font-weight: bold;
+        font-family: "DengXian", "Microsoft YaHei", sans-serif;
+        text-align: center;
+    }
+
+    .print-board {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        border: 3px solid #000;
+        background: transparent;
+    }
+
+    /* 布局适配 (保留修正后的尺寸，确保打印成功) */
+    
+    /* 1个/页 */
+    .print-layout-1 {
+        align-content: center;
+    }
+    .print-layout-1 .print-board {
+        width: 16cm;
+        height: 16cm;
+    }
+    .print-layout-1 .print-cell {
+        font-size: 24pt;
+    }
+
+    /* 2个/页 */
+    .print-layout-2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        align-content: center;
+        gap: 10mm;
+    }
+    .print-layout-2 .print-board {
+        width: 10.5cm; /* 修正后的尺寸 */
+        height: 10.5cm;
+    }
+    .print-layout-2 .print-cell {
+        font-size: 16pt;
+    }
+
+    /* 4个/页 */
+    .print-layout-4 {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 10mm;
+        align-content: center;
+        justify-items: center;
+    }
+    .print-layout-4 .print-board {
+        width: 8cm; 
+        height: 8cm;
+        border-width: 2px;
+    }
+    .print-layout-4 .print-title {
+        font-size: 12pt;
+        margin-bottom: 2mm;
+    }
+    .print-layout-4 .print-cell {
+        font-size: 12pt;
+    }
+
+    /* 单元格样式 */
+    .print-cell {
+        border: 0.5pt solid #000; /* 内部线条变细，使用 pt 单位 */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background: transparent !important;
+    }
+
+    .print-cell.border-right { 
+        border-right: 3px solid #000 !important; 
+    }
+    .print-cell.border-bottom { 
+        border-bottom: 3px solid #000 !important; 
+    }
+    
+    .print-cell-content {
+        font-family: "DengXian", sans-serif;
+        font-weight: 600;
+        color: #000;
+    }
+}
