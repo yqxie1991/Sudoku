@@ -444,8 +444,10 @@ class App {
             let pages = parseInt(document.getElementById('print-pages').value) || 1;
             if (pages < 1) pages = 1;
             if (pages > 20) pages = 20;
+
+            const startIndex = parseInt(document.getElementById('print-start-index').value) || 1;
             
-            this.generatePrintContent(difficulty, count, pages);
+            this.generatePrintContent(difficulty, count, pages, startIndex);
             
             this.closePrintModal();
             
@@ -459,13 +461,13 @@ class App {
         }
     }
 
-    generatePrintContent(difficulty, puzzlesPerPage, totalPages) {
+    generatePrintContent(difficulty, puzzlesPerPage, totalPages, startIndex = 1) {
         this.printArea.innerHTML = '';
         
         // 临时核心实例
         const printCore = new SudokuCore();
         
-        let globalPuzzleIndex = 1;
+        let globalPuzzleIndex = startIndex;
 
         for (let p = 0; p < totalPages; p++) {
             // 创建每一页的容器
